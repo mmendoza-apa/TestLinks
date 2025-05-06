@@ -208,34 +208,47 @@
                         <!-- Base64 PDF -->
                         <div class="list-group-item">
                             <strong class="d-block mb-2">Base64 PDF</strong>
-                            <a href="data:application/pdf;base64,"
-                                download="base64-test.pdf" class="list-group-item list-group-item-action">
+                            <a href="#" class="list-group-item list-group-item-action" onclick="encodeAndDownload('assets/test.pdf', 'test.pdf', 'application/pdf'); return false;">
                                 <i class="bi bi-download"></i>
                                 Download Base64 PDF
-                                <p class="link-description">Downloads base64 encoded PDF file</p>
+                                <p class="link-description">Downloads PDF as base64 data URL</p>
                             </a>
                         </div>
 
                         <!-- Base64 CSV -->
                         <div class="list-group-item">
                             <strong class="d-block mb-2">Base64 CSV</strong>
-                            <a href="data:text/csv;base64,MSwyLDMsNAo1LDYsNyw4CjkxMCwxMSwxMiwxMwo="
-                                download="base64-test.csv" class="list-group-item list-group-item-action">
+                            <a href="#" class="list-group-item list-group-item-action" onclick="generateAndDownloadCSV('test.csv'); return false;">
                                 <i class="bi bi-download"></i>
                                 Download Base64 CSV
-                                <p class="link-description">Downloads base64 encoded CSV file</p>
+                                <p class="link-description">Downloads CSV as base64 data URL</p>
                             </a>
                         </div>
 
                         <!-- Base64 PNG -->
                         <div class="list-group-item">
                             <strong class="d-block mb-2">Base64 PNG</strong>
-                            <a href="data:image/png;base64,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"
-                                download="test-image.png" class="list-group-item list-group-item-action">
+                            <a href="#" class="list-group-item list-group-item-action" onclick="encodeAndDownload('assets/test.png', 'test.png', 'image/png'); return false;">
                                 <i class="bi bi-download"></i>
                                 Download Base64 PNG
-                                <p class="link-description">Downloads base64 encoded PNG file</p>
+                                <p class="link-description">Downloads PNG as base64 data URL</p>
                             </a>
+                        </div>
+                        
+                        <!-- External Blob URL Handler -->
+                        <div class="list-group-item">
+                            <strong class="d-block mb-2">External Blob URL Handler</strong>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="blobUrlInput" placeholder="blob:https://...">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="fileNameInput" placeholder="File name (e.g., download.pdf)">
+                            </div>
+                            <button class="btn btn-primary" onclick="handleExternalBlobUrl()">
+                                <i class="bi bi-download"></i>
+                                Download from Blob URL
+                            </button>
+                            <p class="link-description mt-2">Paste a blob URL to convert it to downloadable data URL</p>
                         </div>
                     </div>
                 </div>
@@ -251,6 +264,98 @@
 
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Base64 Encoding Script -->
+    <script>
+    // Load an asset file and encode it to base64 data URL
+    function encodeAndDownload(assetPath, fileName, mimeType) {
+        fetch(assetPath)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                // Use FileReader to convert blob to base64
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    // reader.result contains the base64 data URL (data:mimetype;base64,...)
+                    triggerDownload(reader.result, fileName);
+                };
+                reader.readAsDataURL(blob); // This creates a data URL
+            })
+            .catch(error => {
+                console.error('Error loading asset:', error);
+                alert('Failed to load asset: ' + error.message);
+            });
+    }
+    
+    // Generate a CSV file and encode it to base64 data URL
+    function generateAndDownloadCSV(fileName) {
+        // Create more complex CSV data
+        const csvContent = [
+            "Name,Email,Score,Date",
+            "Alice Smith,alice@example.com,95,2023-01-15",
+            "Bob Johnson,bob@example.com,88,2023-01-16",
+            "Charlie Brown,charlie@example.com,92,2023-01-17",
+            "Diana Prince,diana@example.com,97,2023-01-18",
+            "Ethan Hunt,ethan@example.com,84,2023-01-19"
+        ].join("\n");
+        
+        // Convert the CSV content to a Blob
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        
+        // Use FileReader to convert blob to base64
+        const reader = new FileReader();
+        reader.onloadend = function() {
+            // reader.result contains the base64 data URL
+            triggerDownload(reader.result, fileName);
+        };
+        reader.readAsDataURL(blob);
+    }
+    
+    // Create an anchor with the data URL and trigger a download
+    function triggerDownload(dataUrl, fileName) {
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        
+        // Clean up
+        setTimeout(() => {
+            document.body.removeChild(link);
+        }, 100);
+    }
+    
+    // Handle external blob URL
+    function handleExternalBlobUrl() {
+        const blobUrl = document.getElementById('blobUrlInput').value.trim();
+        const fileName = document.getElementById('fileNameInput').value.trim() || 'download.file';
+        
+        if (!blobUrl || !blobUrl.startsWith('blob:')) {
+            alert('Please enter a valid blob URL (should start with "blob:")');
+            return;
+        }
+        
+        fetch(blobUrl)
+            .then(response => response.blob())
+            .then(blob => {
+                // Use FileReader to convert blob to base64
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    // reader.result contains the base64 data URL
+                    triggerDownload(reader.result, fileName);
+                };
+                reader.readAsDataURL(blob);
+            })
+            .catch(error => {
+                console.error('Error handling blob URL:', error);
+                alert('Failed to process blob URL: ' + error.message);
+            });
+    }
+    </script>
 </body>
 
 </html>
