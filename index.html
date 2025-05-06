@@ -208,47 +208,34 @@
                         <!-- Base64 PDF -->
                         <div class="list-group-item">
                             <strong class="d-block mb-2">Base64 PDF</strong>
-                            <a href="#" class="list-group-item list-group-item-action" onclick="encodeAndDownload('assets/test.pdf', 'test.pdf', 'application/pdf'); return false;">
+                            <button class="list-group-item list-group-item-action"
+                                onclick="loadAndDownloadAsset('assets/test.pdf', 'dynamic-pdf.pdf', 'application/pdf')">
                                 <i class="bi bi-download"></i>
-                                Download Base64 PDF
-                                <p class="link-description">Downloads PDF as base64 data URL</p>
-                            </a>
+                                Download Dynamic PDF
+                                <p class="link-description">Creates and downloads PDF as blob URL</p>
+                            </button>
                         </div>
 
                         <!-- Base64 CSV -->
                         <div class="list-group-item">
                             <strong class="d-block mb-2">Base64 CSV</strong>
-                            <a href="#" class="list-group-item list-group-item-action" onclick="generateAndDownloadCSV('test.csv'); return false;">
+                            <button class="list-group-item list-group-item-action"
+                                onclick="generateAndDownloadCSV('dynamic-csv.csv')">
                                 <i class="bi bi-download"></i>
-                                Download Base64 CSV
-                                <p class="link-description">Downloads CSV as base64 data URL</p>
-                            </a>
+                                Download Dynamic CSV
+                                <p class="link-description">Creates and downloads CSV as blob URL</p>
+                            </button>
                         </div>
 
                         <!-- Base64 PNG -->
                         <div class="list-group-item">
                             <strong class="d-block mb-2">Base64 PNG</strong>
-                            <a href="#" class="list-group-item list-group-item-action" onclick="encodeAndDownload('assets/test.png', 'test.png', 'image/png'); return false;">
+                            <button class="list-group-item list-group-item-action"
+                                onclick="loadAndDownloadAsset('assets/test.png', 'dynamic-image.png', 'image/png')">
                                 <i class="bi bi-download"></i>
-                                Download Base64 PNG
-                                <p class="link-description">Downloads PNG as base64 data URL</p>
-                            </a>
-                        </div>
-                        
-                        <!-- External Blob URL Handler -->
-                        <div class="list-group-item">
-                            <strong class="d-block mb-2">External Blob URL Handler</strong>
-                            <div class="mb-3">
-                                <input type="text" class="form-control" id="blobUrlInput" placeholder="blob:https://...">
-                            </div>
-                            <div class="mb-3">
-                                <input type="text" class="form-control" id="fileNameInput" placeholder="File name (e.g., download.pdf)">
-                            </div>
-                            <button class="btn btn-primary" onclick="handleExternalBlobUrl()">
-                                <i class="bi bi-download"></i>
-                                Download from Blob URL
+                                Download Dynamic PNG
+                                <p class="link-description">Creates and downloads PNG as blob URL</p>
                             </button>
-                            <p class="link-description mt-2">Paste a blob URL to convert it to downloadable data URL</p>
                         </div>
                     </div>
                 </div>
@@ -264,97 +251,75 @@
 
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Base64 Encoding Script -->
+
+
+    <!-- Dynamic Asset Loading Script -->
     <script>
-    // Load an asset file and encode it to base64 data URL
-    function encodeAndDownload(assetPath, fileName, mimeType) {
-        fetch(assetPath)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.blob();
-            })
-            .then(blob => {
-                // Use FileReader to convert blob to base64
-                const reader = new FileReader();
-                reader.onloadend = function() {
-                    // reader.result contains the base64 data URL (data:mimetype;base64,...)
-                    triggerDownload(reader.result, fileName);
-                };
-                reader.readAsDataURL(blob); // This creates a data URL
-            })
-            .catch(error => {
-                console.error('Error loading asset:', error);
-                alert('Failed to load asset: ' + error.message);
-            });
-    }
-    
-    // Generate a CSV file and encode it to base64 data URL
-    function generateAndDownloadCSV(fileName) {
-        // Create more complex CSV data
-        const csvContent = [
-            "Name,Email,Score,Date",
-            "Alice Smith,alice@example.com,95,2023-01-15",
-            "Bob Johnson,bob@example.com,88,2023-01-16",
-            "Charlie Brown,charlie@example.com,92,2023-01-17",
-            "Diana Prince,diana@example.com,97,2023-01-18",
-            "Ethan Hunt,ethan@example.com,84,2023-01-19"
-        ].join("\n");
-        
-        // Convert the CSV content to a Blob
-        const blob = new Blob([csvContent], { type: 'text/csv' });
-        
-        // Use FileReader to convert blob to base64
-        const reader = new FileReader();
-        reader.onloadend = function() {
-            // reader.result contains the base64 data URL
-            triggerDownload(reader.result, fileName);
-        };
-        reader.readAsDataURL(blob);
-    }
-    
-    // Create an anchor with the data URL and trigger a download
-    function triggerDownload(dataUrl, fileName) {
-        const link = document.createElement('a');
-        link.href = dataUrl;
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        
-        // Clean up
-        setTimeout(() => {
-            document.body.removeChild(link);
-        }, 100);
-    }
-    
-    // Handle external blob URL
-    function handleExternalBlobUrl() {
-        const blobUrl = document.getElementById('blobUrlInput').value.trim();
-        const fileName = document.getElementById('fileNameInput').value.trim() || 'download.file';
-        
-        if (!blobUrl || !blobUrl.startsWith('blob:')) {
-            alert('Please enter a valid blob URL (should start with "blob:")');
-            return;
+        // Load an asset file and download it as a blob
+        function loadAndDownloadAsset(assetPath, fileName, mimeType) {
+            fetch(assetPath)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    // Create a blob with the correct mime type
+                    const file = new Blob([blob], { type: mimeType });
+
+                    // Create a blob URL
+                    const url = URL.createObjectURL(file);
+
+                    // Create temporary link for downloading
+                    downloadFromBlobUrl(url, fileName);
+                })
+                .catch(error => {
+                    console.error('Error loading asset:', error);
+                    alert('Failed to load asset: ' + error.message);
+                });
         }
-        
-        fetch(blobUrl)
-            .then(response => response.blob())
-            .then(blob => {
-                // Use FileReader to convert blob to base64
-                const reader = new FileReader();
-                reader.onloadend = function() {
-                    // reader.result contains the base64 data URL
-                    triggerDownload(reader.result, fileName);
-                };
-                reader.readAsDataURL(blob);
-            })
-            .catch(error => {
-                console.error('Error handling blob URL:', error);
-                alert('Failed to process blob URL: ' + error.message);
-            });
-    }
+
+        // Generate a CSV file and download it
+        function generateAndDownloadCSV(fileName) {
+            // Create more complex CSV data
+            const csvContent = [
+                "Name,Email,Score,Date",
+                "Alice Smith,alice@example.com,95,2023-01-15",
+                "Bob Johnson,bob@example.com,88,2023-01-16",
+                "Charlie Brown,charlie@example.com,92,2023-01-17",
+                "Diana Prince,diana@example.com,97,2023-01-18",
+                "Ethan Hunt,ethan@example.com,84,2023-01-19"
+            ].join("\n");
+
+            // Create a blob with the CSV content
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+
+            // Create a blob URL
+            const url = URL.createObjectURL(blob);
+
+            // Download the file
+            downloadFromBlobUrl(url, fileName);
+        }
+
+        // Create download from blob URL - handles WebView compatibility
+        function downloadFromBlobUrl(url, fileName) {
+            // Method 1: Traditional anchor method (works in browsers)
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+
+            // Clean up
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
+
+            // Note: For WebViews in mobile apps, this approach may trigger a navigation event
+            // depending on how the WebView is configured to handle downloads
+        }
     </script>
 </body>
 
