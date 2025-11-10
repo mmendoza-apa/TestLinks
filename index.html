@@ -321,6 +321,16 @@
             // depending on how the WebView is configured to handle downloads
         }
     </script>
+
+    <script>
+    // Listen for .NET → WebView event
+    window.addEventListener("openSideMenuEvent", (e) => {
+        console.log("openSideMenuEvent received", e.detail);
+
+        // 👉 Replace this with whatever you want your side menu to do
+        alert("Side Menu should open now!");
+    });
+</script>
 </body>
 
 </html>
