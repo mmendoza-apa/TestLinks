@@ -243,6 +243,27 @@
         </div>
     </div>
 
+    <!-- Flyout menu -->
+    <div id="flyoutMenu" style="
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #343a40;
+    color: white;
+    padding: 1rem;
+    transition: left 0.3s ease;
+    z-index: 1000;
+    ">
+        <h4>Flyout Menu</h4>
+        <ul>
+            <li><a href="#" style="color:white;">Home</a></li>
+            <li><a href="#" style="color:white;">Profile</a></li>
+            <li><a href="#" style="color:white;">Settings</a></li>
+        </ul>
+    </div>
+
     <footer class="py-3 mt-4">
         <div class="container text-center text-muted">
             <small>© 2025 - MAUI Test Web App</small>
@@ -323,14 +344,30 @@
     </script>
 
     <script>
-    // Listen for .NET → WebView event
-    window.addEventListener("openSideMenuEvent", (e) => {
-        console.log("openSideMenuEvent received", e.detail);
+        // Track if flyout is open
+        let isFlyoutOpen = false;
 
-        // 👉 Replace this with whatever you want your side menu to do
-        alert("Side Menu should open now!");
-    });
-</script>
+        function toggleFlyout() {
+            const flyout = document.getElementById("flyoutMenu");
+            if (!flyout) return;
+
+            if (isFlyoutOpen) {
+                flyout.style.left = "-250px"; // hide
+            } else {
+                flyout.style.left = "0"; // show
+            }
+
+            isFlyoutOpen = !isFlyoutOpen;
+            console.log("Flyout state:", isFlyoutOpen ? "OPEN" : "CLOSED");
+        }
+
+        // Listen for .NET → WebView event
+        window.addEventListener("toggleSideMenuEvent", (e) => {
+            console.log("toggleSideMenuEvent received", e.detail);
+
+            toggleFlyout(); // toggle open/close
+        });
+    </script>
 </body>
 
 </html>
