@@ -44,6 +44,41 @@
         .bi {
             margin-right: 8px;
         }
+
+        /* Theme styles */
+        body.light-theme {
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+
+        body.dark-theme {
+            background-color: #1e1e1e;
+            color: #f1f1f1;
+        }
+
+        .dark-theme .card {
+            background-color: #2c2c2c;
+            color: #fff;
+            border-color: #444;
+        }
+
+        .dark-theme .navbar {
+            background-color: #2b2b2b !important;
+            color: white;
+        }
+
+        /* Font size scaling */
+        body.font-small {
+            font-size: 14px;
+        }
+
+        body.font-medium {
+            font-size: 16px;
+        }
+
+        body.font-large {
+            font-size: 18px;
+        }
     </style>
 </head>
 
@@ -366,6 +401,32 @@
             console.log("toggleSideMenuEvent received", e.detail);
 
             toggleFlyout(); // toggle open/close
+        });
+    </script>
+
+    <script>
+        // Apply theme and font size from localStorage or window vars
+        function applyThemeAndFont() {
+            const theme = window.userTheme || localStorage.getItem("appTheme") || "light";
+            const fontSize = window.userFontSize || localStorage.getItem("formattedFontSize") || "medium";
+
+            document.body.classList.remove("light-theme", "dark-theme");
+            document.body.classList.add(`${theme}-theme`);
+
+            document.body.classList.remove("font-small", "font-medium", "font-large");
+            document.body.classList.add(`font-${fontSize}`);
+
+            console.log(`Applied theme: ${theme}, font size: ${fontSize}`);
+        }
+
+        // Run on load
+        applyThemeAndFont();
+
+        // Re-run when .NET dispatches a theme change event
+        window.addEventListener("storage", (e) => {
+            if (e.key === "appTheme" || e.key === "formattedFontSize") {
+                applyThemeAndFont();
+            }
         });
     </script>
 </body>
