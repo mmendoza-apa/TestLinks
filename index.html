@@ -130,17 +130,8 @@
             color: #b0b0b0 !important;
         }
 
-        .theme-toggle-btn {
-            background-color: #f8f9fa;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-            color: #6c757d;
-        }
-
-        .navbar.hidden {
-            display: none;
-        }
-
-        .theme-toggle-btn {
+        .theme-toggle-btn,
+        .mobile-msg-btn {
             background: none;
             border: none;
             color: inherit;
@@ -152,8 +143,13 @@
             justify-content: center;
         }
 
-        .theme-toggle-btn:hover {
+        .theme-toggle-btn:hover,
+        .mobile-msg-btn:hover {
             opacity: 0.8;
+        }
+
+        .navbar.hidden {
+            display: none;
         }
 
         /* Font size scaling */
@@ -175,9 +171,14 @@
     <nav class="navbar border-bottom">
         <div class="container d-flex justify-content-between align-items-center">
             <span class="navbar-brand mb-0 h1">MAUI Test Web App</span>
-            <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle theme">
-                <i class="bi bi-moon-fill"></i>
-            </button>
+            <div class="d-flex gap-2">
+                <button class="mobile-msg-btn" id="mobileMsgBtn" title="Send message to mobile app">
+                    <i class="bi bi-phone"></i>
+                </button>
+                <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle theme">
+                    <i class="bi bi-moon-fill"></i>
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -555,13 +556,25 @@
 
         // Run on load
         applyThemeAndFont();
-        checkAndHideNavbarIfNeeded();
+        // checkAndHideNavbarIfNeeded();
 
-        // Add theme toggle button listener
+        // Add button listeners
         document.addEventListener("DOMContentLoaded", () => {
             const themeToggleBtn = document.getElementById("themeToggleBtn");
             if (themeToggleBtn) {
                 themeToggleBtn.addEventListener("click", toggleTheme);
+            }
+
+            const mobileMsgBtn = document.getElementById("mobileMsgBtn");
+            if (mobileMsgBtn) {
+                mobileMsgBtn.addEventListener("click", () => {
+                    if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.mobiletest) {
+                        window.webkit.messageHandlers.mobiletest.postMessage("hello mobile app");
+                        console.log("Message sent to mobile app");
+                    } else {
+                        console.log("Mobile app handler not available");
+                    }
+                });
             }
         });
 
